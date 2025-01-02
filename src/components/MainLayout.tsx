@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from "react";
-import { ReactComponent as Logo } from "../assets/logo.svg";
+import { ReactComponent as Logo } from "../assets/Logo.svg";
 import { ModeToggle } from "./ModeToggle";
 import { Separator } from "./ui/separator";
 
