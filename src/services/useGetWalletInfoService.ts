@@ -1,12 +1,11 @@
+import { WalletInfo } from "@/interfaces/comparator";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import { ERC20_ABI } from "../utils/abi";
 import { tokenData } from "../utils/constants";
 
 export default function useGetWalletInfoService() {
-  const [walletInfo, setWalletInfo] = useState<
-    { name: string; balance: string }[]
-  >([]);
+  const [walletInfo, setWalletInfo] = useState<WalletInfo[]>([]);
 
   const tokenAddresses = tokenData.map((token) => token.address);
 
@@ -22,8 +21,9 @@ export default function useGetWalletInfoService() {
     // Get ETH balance
     const ethBalance = await provider.getBalance(walletAddress);
     const ethInfo = {
-      name: "ETH",
+      name: "Ethereum",
       balance: ethers.formatUnits(ethBalance, 18),
+      symbol: "ETH",
     };
 
     // Get token balances
@@ -38,6 +38,7 @@ export default function useGetWalletInfoService() {
       return {
         name,
         balance: ethers.formatUnits(balance, 18),
+        symbol: await tokenContract.symbol(),
       };
     });
     try {

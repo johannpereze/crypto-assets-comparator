@@ -15,6 +15,11 @@ const testingAssets = [
     currency: "ETH",
     batchId: "1",
   },
+  {
+    basePair: "USD",
+    currency: "USDC",
+    batchId: "1",
+  },
 ];
 
 export default function useGetRatesService() {
