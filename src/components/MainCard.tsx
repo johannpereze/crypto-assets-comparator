@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "./ui/card";
@@ -49,20 +48,22 @@ export default function MainCard() {
                   <Avatar>
                     <i className={`cf cf-${symbol.toLowerCase()} text-4xl`}></i>
                   </Avatar>
-                  <p className="text-lg font-semibold">{name}</p>
+                  <p className="text-base font-semibold">{name}</p>
                 </div>
                 <div className="flex flex-col items-end">
-                  <p className="text-lg font-semibold">
-                    $ {getUSDValue(symbol, balance, rates)} USD
+                  <p className="text-md font-semibold">
+                    <span className="text-lg font-thin">$</span>{" "}
+                    {getUSDValue(symbol, balance, rates)}{" "}
+                    <span className="text-md font-thin">USD</span>
                   </p>
-                  <p className="text-sm text-gray-400">
-                    {balance} {symbol}
+                  <p className="text-xs text-gray-400">
+                    {parseFloat(balance).toFixed(5)} {symbol}
                   </p>
                 </div>
               </div>
             ))}
           </CardContent>
-          <CardFooter>footer</CardFooter>
+          {/* <CardFooter>footer</CardFooter> */}
         </Card>
       </div>
     </div>

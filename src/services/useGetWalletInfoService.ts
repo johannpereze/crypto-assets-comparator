@@ -35,10 +35,12 @@ export default function useGetWalletInfoService() {
       );
       const name = await tokenContract.name();
       const balance = await tokenContract.balanceOf(walletAddress);
+      const decimals = await tokenContract.decimals();
       return {
         name,
-        balance: ethers.formatUnits(balance, 18),
+        balance: ethers.formatUnits(balance, decimals),
         symbol: await tokenContract.symbol(),
+        decimals,
       };
     });
     try {
