@@ -1,5 +1,6 @@
 import { AppContext } from "@/context/AppContext";
-import { useContext } from "react";
+import { SelectedAssets } from "@/interfaces/comparator";
+import { Dispatch, SetStateAction, useContext } from "react";
 import { CoinsComboBox } from "./CoinsComboBox";
 import {
   Card,
@@ -9,7 +10,15 @@ import {
   CardTitle,
 } from "./ui/card";
 
-export default function SelectorCard() {
+interface SelectorCardProps {
+  selectedAssets: SelectedAssets;
+  setSelectedAssets: Dispatch<SetStateAction<SelectedAssets>>;
+}
+
+export default function SelectorCard({
+  selectedAssets,
+  setSelectedAssets,
+}: SelectorCardProps) {
   const { walletInfo, rates } = useContext(AppContext);
   console.log("🚀 ~ MainCard ~ walletInfo:", walletInfo);
   console.log("🚀 ~ MainCard ~ rates:", rates);
@@ -25,11 +34,19 @@ export default function SelectorCard() {
           <CardContent className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <p className="font-thin text-sm mb-1">Asset A</p>
-              <CoinsComboBox />
+              <CoinsComboBox
+                value={selectedAssets.a}
+                setValue={setSelectedAssets}
+                name="a"
+              />
             </div>
             <div className="flex-1">
               <p className="font-thin text-sm mb-1">Asset B</p>
-              <CoinsComboBox />
+              <CoinsComboBox
+                value={selectedAssets.b}
+                setValue={setSelectedAssets}
+                name="b"
+              />
             </div>
           </CardContent>
         </Card>

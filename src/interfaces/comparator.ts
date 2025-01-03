@@ -16,3 +16,8 @@ export interface WalletInfo {
   balance: string;
   symbol: string;
 }
+
+export interface SelectedAssets {
+  a: string | null;
+  b: string | null;
+}

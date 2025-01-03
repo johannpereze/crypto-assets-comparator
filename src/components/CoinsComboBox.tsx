@@ -1,7 +1,4 @@
-"use client";
-
 import { Check, ChevronsUpDown } from "lucide-react";
-import * as React from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +13,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { SelectedAssets } from "@/interfaces/comparator";
 import { cn } from "@/lib/utils";
+import { Dispatch, SetStateAction, useState } from "react";
 
 const frameworks = [
   {
@@ -41,9 +40,14 @@ const frameworks = [
   },
 ];
 
-export function CoinsComboBox() {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+interface CoinsComboBoxProps {
+  value: string | null;
+  setValue: Dispatch<SetStateAction<SelectedAssets>>;
+  name: string;
+}
+
+export function CoinsComboBox({ value, setValue, name }: CoinsComboBoxProps) {
+  const [open, setOpen] = useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -69,7 +73,10 @@ export function CoinsComboBox() {
               <CommandItem
                 key={framework.value}
                 onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
+                  setValue((prev) => ({
+                    ...prev,
+                    [name]: currentValue === value ? "" : currentValue,
+                  }));
                   setOpen(false);
                 }}
               >
