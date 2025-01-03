@@ -1,5 +1,6 @@
 import MainCard from "./components/MainCard.tsx";
 import MainLayout from "./components/MainLayout.tsx";
+import SelectorCard from "./components/SelectorCard.tsx";
 import { ThemeProvider } from "./components/ThemeProvider.tsx";
 import { AppContext } from "./context/AppContext.ts";
 import useGetRatesService from "./services/useGetRatesService";
@@ -15,6 +16,7 @@ function App() {
       <AppContext.Provider value={{ walletInfo, rates }}>
         <MainLayout>
           <MainCard />
+          <SelectorCard />
         </MainLayout>
       </AppContext.Provider>
     </ThemeProvider>
