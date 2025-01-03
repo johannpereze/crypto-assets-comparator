@@ -1,3 +1,4 @@
+import { Chart } from "./components/Chart.tsx";
 import MainCard from "./components/MainCard.tsx";
 import MainLayout from "./components/MainLayout.tsx";
 import SelectorCard from "./components/SelectorCard.tsx";
@@ -17,6 +18,7 @@ function App() {
         <MainLayout>
           <MainCard />
           <SelectorCard />
+          <Chart />
         </MainLayout>
       </AppContext.Provider>
     </ThemeProvider>

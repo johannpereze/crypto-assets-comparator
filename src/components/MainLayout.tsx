@@ -10,7 +10,7 @@ const MainLayout: FC<PropsWithChildren> = ({ children }) => {
         <div className="flex h-20 w-full max-w-2xl items-center justify-between ">
           <div className={`flex items-center`}>
             <Logo className="h-14 w-14" />
-            <h1 className="scroll-m-20 font-semibold tracking-tight lg:text-5xl">
+            <h1 className="scroll-m-20 font-semibold tracking-tight text-2xl lg:text-5xl">
               CA Comparator
             </h1>
           </div>
