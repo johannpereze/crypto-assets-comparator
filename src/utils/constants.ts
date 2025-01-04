@@ -5,6 +5,13 @@ export const tatumFetchExpirationInMinutes =
 
 export const tokenData: Token[] = [
   {
+    name: "Ethereum",
+    symbol: "ETH",
+    address: null,
+    id: "ethereum",
+  },
+
+  {
     name: "USD Coin",
     symbol: "USDC",
     address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -23,22 +30,10 @@ export const tokenData: Token[] = [
     id: "binance-usd",
   },
   {
-    name: "Dai Stablecoin",
-    symbol: "DAI",
-    address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-    id: "dai",
-  },
-  {
     name: "Wrapped Bitcoin",
     symbol: "WBTC",
     address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
     id: "wrapped-bitcoin",
-  },
-  {
-    name: "SHIBA INU",
-    symbol: "SHIB",
-    address: "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
-    id: "shiba-inu",
   },
   {
     name: "Uniswap",

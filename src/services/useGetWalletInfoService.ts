@@ -7,7 +7,19 @@ import { tokenData } from "../utils/constants";
 export default function useGetWalletInfoService() {
   const [walletInfo, setWalletInfo] = useState<WalletInfo[]>([]);
 
-  const tokenAddresses = tokenData.map((token) => token.address);
+  /* Type Guard */
+  const tokenAddresses: string[] = tokenData
+    .filter(
+      (
+        token
+      ): token is {
+        name: string;
+        symbol: string;
+        address: string;
+        id: string;
+      } => token.address !== null && token.address !== undefined
+    )
+    .map((token) => token.address);
 
   const getWalletInfo = async (walletAddress: string) => {
     if (!window.ethereum) {

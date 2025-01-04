@@ -2,25 +2,7 @@ import { useEffect } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { tatumRateEndpoint } from "../config/endpoints";
 import { RatesLocalStorageData } from "../interfaces/comparator";
-import { tatumFetchExpirationInMinutes } from "../utils/constants";
-
-const testingAssets = [
-  {
-    basePair: "USD",
-    currency: "BTC",
-    batchId: "1",
-  },
-  {
-    basePair: "USD",
-    currency: "ETH",
-    batchId: "1",
-  },
-  {
-    basePair: "USD",
-    currency: "USDC",
-    batchId: "1",
-  },
-];
+import { tatumFetchExpirationInMinutes, tokenData } from "../utils/constants";
 
 export default function useGetRatesService() {
   const [value, setValue] = useLocalStorage<RatesLocalStorageData>("apiData", {
@@ -34,7 +16,11 @@ export default function useGetRatesService() {
     headers.append("accept", "application/json");
     headers.append("content-type", "application/json");
 
-    const body = testingAssets; // TODO: Replace with real data
+    const body = tokenData.map((token) => ({
+      basePair: "USD",
+      currency: token.symbol,
+      batchId: "1",
+    }));
 
     try {
       const response = await fetch(tatumRateEndpoint, {

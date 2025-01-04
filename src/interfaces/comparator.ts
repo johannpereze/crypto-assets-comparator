@@ -8,7 +8,7 @@ export interface RatesLocalStorageData {
 export interface Token {
   name: string;
   symbol: string;
-  address: string;
+  address: string | null;
   id: string;
 }
 
