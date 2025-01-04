@@ -10,7 +10,6 @@ export const tokenData: Token[] = [
     address: null,
     id: "ethereum",
   },
-
   {
     name: "USD Coin",
     symbol: "USDC",
