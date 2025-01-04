@@ -209,6 +209,15 @@ export function Chart({ selectedAssets }: { selectedAssets: SelectedAssets }) {
             </ChartContainer>
           </CardContent>
         </Card>
+        <p className="text-xs text-gray-400 mt-2">
+          Powered by{" "}
+          <a
+            href="https://www.coingecko.com/en/api"
+            className="text-blue-500 hover:text-blue-700"
+          >
+            CoinGecko API
+          </a>
+        </p>
       </div>
     </div>
   );
