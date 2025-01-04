@@ -50,7 +50,6 @@ export default function useGetMarketChartRange() {
         throw new Error("Error fetching data");
       }
       const data = await response.json();
-      console.log("🚀 ~ fetchMarket ~ data:", data);
 
       // Adds a predetermined amount of minutes to the current date
       const dueDate = new Date();
@@ -64,22 +63,6 @@ export default function useGetMarketChartRange() {
       console.error("Error fetching data:", error);
     }
   };
-
-  // useEffect(() => {
-  //   console.log("me ejecuto");
-  //   // fetchRates();
-  //   // const storedData = value;
-
-  //   // if (!storedData || !storedData.dueTimestamp) {
-  //   //   fetchRates();
-  //   // } else {
-  //   //   const dueDate = new Date(storedData.dueTimestamp);
-
-  //   //   if (dueDate < new Date()) {
-  //   //     fetchRates();
-  //   //   }
-  //   // }
-  // }, [setValue]);
 
   return { fetchRates };
 }

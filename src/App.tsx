@@ -16,8 +16,6 @@ function App() {
     a: null,
     b: null,
   });
-  console.log("🚀 ~ App ~ selectedAssets:", selectedAssets);
-  console.log("🚀 ~ App ~ walletInfo:", walletInfo);
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -28,7 +26,7 @@ function App() {
             selectedAssets={selectedAssets}
             setSelectedAssets={setSelectedAssets}
           />
-          <Chart />
+          <Chart selectedAssets={selectedAssets} />
         </MainLayout>
       </AppContext.Provider>
     </ThemeProvider>

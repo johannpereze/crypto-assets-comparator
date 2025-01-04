@@ -15,116 +15,85 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { ethereumPrices, solanaPrices } from "@/utils/prices";
+import { SelectedAssets } from "@/interfaces/comparator";
+import { MarketLocalStorageData } from "@/services/useGetMarketChartRange";
+import { toCapitalCase } from "@/utils";
 import { format } from "date-fns";
 import { useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
 
 export const description = "An interactive bar chart";
 
 export type PriceData = [number, number];
 type MergedPriceData = {
   date: string;
-  ethereum?: number;
-  solana?: number;
+  [key: string]: string | number | undefined;
 };
 
-// const chartConfig = {
-//   views: {
-//     label: "Page Views",
-//   },
-//   desktop: {
-//     label: "Desktop",
-//     color: "hsl(var(--chart-1))",
-//   },
-//   mobile: {
-//     label: "Mobile",
-//     color: "hsl(var(--chart-2))",
-//   },
-// } satisfies ChartConfig;
+type ChartType = "last_week" | "last_month" | "last_year";
 
-const chartConfig = {
-  last_week: {
-    label: "Last Week",
-    color: "hsl(var(--chart-1))",
-  },
-  last_month: {
-    label: "Last Month",
-    color: "hsl(var(--chart-2))",
-  },
-  last_year: {
-    label: "Last Year",
-    color: "hsl(var(--chart-2))",
-  },
-  ethereum: {
-    label: "Ethereum",
-    color: "hsl(var(--chart-2))",
-  },
-  solana: {
-    label: "Solana",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig;
-
-export function Chart() {
-  const [activeChart, setActiveChart] =
-    useState<keyof typeof chartConfig>("last_week");
-
-  // const total = useMemo(
-  //   () => ({
-  //     last_week: chartData.reduce((acc, curr) => acc + curr.last_week, 0),
-  //     last_month: chartData.reduce((acc, curr) => acc + curr.last_month, 0),
-  //     last_year: chartData.reduce((acc, curr) => acc + curr.last_month, 0),
-  //   }),
-  //   []
-  // );
-
-  const total = {
-    last_week: 0,
-    last_month: 0,
-    last_year: 0,
-  };
-
-  // const [timeRange] = useState("90d");
-  // const filteredData = chartData.filter((item) => {
-  //   const date = new Date(item.date);
-  //   const referenceDate = new Date("2024-06-30");
-  //   let daysToSubtract = 90;
-  //   if (timeRange === "30d") {
-  //     daysToSubtract = 30;
-  //   } else if (timeRange === "7d") {
-  //     daysToSubtract = 7;
-  //   }
-  //   const startDate = new Date(referenceDate);
-  //   startDate.setDate(startDate.getDate() - daysToSubtract);
-  //   return date >= startDate;
-  // });
+export function Chart({ selectedAssets }: { selectedAssets: SelectedAssets }) {
+  const chartConfig = {
+    a: {
+      label: selectedAssets.a,
+      color: "hsl(var(--chart-1))",
+    },
+    b: {
+      label: selectedAssets.b,
+      color: "hsl(var(--chart-2))",
+    },
+  } satisfies ChartConfig;
+  const [activeChart, setActiveChart] = useState<ChartType>("last_year");
+  const [value] = useLocalStorage<MarketLocalStorageData>("marketData", {});
 
   const mergePrices = (
-    ethPrices: PriceData[],
-    solPrices: PriceData[]
+    aPrices: PriceData[],
+    bPrices: PriceData[]
   ): MergedPriceData[] => {
     const merged: { [key: string]: MergedPriceData } = {};
 
-    ethPrices.forEach(([timestamp, price]) => {
-      const date = format(new Date(timestamp), "yyyy-MM-dd");
-      if (!merged[date]) {
-        merged[date] = { date };
-      }
-      merged[date].ethereum = price;
-    });
+    if (aPrices) {
+      aPrices.forEach(([timestamp, price]) => {
+        const date = format(new Date(timestamp), "yyyy-MM-dd");
+        if (!merged[date]) {
+          merged[date] = { date };
+        }
+        merged[date].a = price;
+      });
+    }
 
-    solPrices.forEach(([timestamp, price]) => {
-      const date = format(new Date(timestamp), "yyyy-MM-dd");
-      if (!merged[date]) {
-        merged[date] = { date };
-      }
-      merged[date].solana = price;
-    });
+    if (bPrices) {
+      bPrices.forEach(([timestamp, price]) => {
+        const date = format(new Date(timestamp), "yyyy-MM-dd");
+        if (!merged[date]) {
+          merged[date] = { date };
+        }
+        merged[date].b = price;
+      });
+    }
 
     return Object.values(merged);
   };
 
-  const mergedPrices = mergePrices(ethereumPrices, solanaPrices);
+  const mergedPrices = mergePrices(
+    value[selectedAssets.a || ""]?.prices,
+    value[selectedAssets.b || ""]?.prices
+  );
+
+  const [timeRange, setTimeRange] = useState("last_year");
+  const filteredData = mergedPrices.filter((item) => {
+    const date = new Date(item.date);
+    const referenceDate = new Date();
+    let daysToSubtract = 365;
+    if (timeRange === "last_month") {
+      daysToSubtract = 30;
+    } else if (timeRange === "last_week") {
+      daysToSubtract = 7;
+    }
+    const startDate = new Date(referenceDate);
+    startDate.setDate(startDate.getDate() - daysToSubtract);
+    return date >= startDate;
+  });
 
   return (
     <div className="flex justify-center w-full p-4">
@@ -138,24 +107,26 @@ export function Chart() {
               </CardDescription>
             </div>
             <div className="flex">
-              {["last_week", "last_month", "last_year"].map((key) => {
-                const chart = key as keyof typeof chartConfig;
-                return (
-                  <button
-                    key={chart}
-                    data-active={activeChart === chart}
-                    className="relative z-30 flex flex-1 flex-col justify-center items-center gap-1 border-t px-3 py-2 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:px-8 sm:py-6"
-                    onClick={() => setActiveChart(chart)}
-                  >
-                    <span className="text-xs text-muted-foreground">
-                      {chartConfig[chart].label}
-                    </span>
-                    <span className="text-lg font-bold leading-none sm:text-3xl">
-                      {total[key as keyof typeof total].toLocaleString()}
-                    </span>
-                  </button>
-                );
-              })}
+              {(["last_week", "last_month", "last_year"] as ChartType[]).map(
+                (key) => {
+                  const chart: ChartType = key;
+                  return (
+                    <button
+                      key={chart}
+                      data-active={activeChart === chart}
+                      className="relative z-30 flex flex-1 flex-col justify-center items-center gap-1 border-t px-3 py-2 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:px-8 sm:py-6"
+                      onClick={() => {
+                        setTimeRange(chart);
+                        setActiveChart(chart);
+                      }}
+                    >
+                      <span className="text-lg">
+                        {toCapitalCase(chart.replace("_", " "))}
+                      </span>
+                    </button>
+                  );
+                }
+              )}
             </div>
           </CardHeader>
           <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
@@ -163,7 +134,7 @@ export function Chart() {
               config={chartConfig}
               className="aspect-auto h-[250px] w-full"
             >
-              <AreaChart data={mergedPrices}>
+              <AreaChart data={filteredData}>
                 <defs>
                   <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
                     <stop
@@ -220,17 +191,17 @@ export function Chart() {
                   }
                 />
                 <Area
-                  dataKey="ethereum"
+                  dataKey="a"
                   type="natural"
                   fill="url(#fillMobile)"
-                  stroke="var(--color-last_week)"
+                  stroke="var(--color-a)"
                   stackId="a"
                 />
                 <Area
-                  dataKey="solana"
+                  dataKey="b"
                   type="natural"
                   fill="url(#fillDesktop)"
-                  stroke="var(--color-last_month)"
+                  stroke="var(--color-b)"
                   stackId="a"
                 />
                 <ChartLegend content={<ChartLegendContent />} />

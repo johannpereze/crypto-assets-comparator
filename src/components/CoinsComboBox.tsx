@@ -35,7 +35,6 @@ export function CoinsComboBox({ value, setValue, name }: CoinsComboBoxProps) {
   }));
 
   const handleSelect = (currentValue: string) => {
-    console.log("🚀 ~ handleSelect ~ currentValue:", currentValue);
     setValue((prev) => ({
       ...prev,
       [name]: currentValue === value ? "" : currentValue,

@@ -1,6 +1,5 @@
-import { AppContext } from "@/context/AppContext";
 import { SelectedAssets } from "@/interfaces/comparator";
-import { Dispatch, SetStateAction, useContext } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { CoinsComboBox } from "./CoinsComboBox";
 import {
   Card,
@@ -19,10 +18,6 @@ export default function SelectorCard({
   selectedAssets,
   setSelectedAssets,
 }: SelectorCardProps) {
-  const { walletInfo, rates } = useContext(AppContext);
-  console.log("🚀 ~ MainCard ~ walletInfo:", walletInfo);
-  console.log("🚀 ~ MainCard ~ rates:", rates);
-
   return (
     <div className="flex justify-center w-full p-4">
       <div className="min-w-[16rem] max-w-xl w-full">

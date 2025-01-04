@@ -12,7 +12,6 @@ import {
 
 export default function MainCard() {
   const { walletInfo, rates } = useContext(AppContext);
-  console.log("🚀 ~ MainCard ~ rates:", rates);
   const availableCoins = walletInfo.filter((coin) => coin.balance !== "0.0");
 
   const getUSDValue = (
@@ -20,12 +19,10 @@ export default function MainCard() {
     balance: string,
     rates: RatesLocalStorageData
   ) => {
-    console.log("🚀 ~ MainCard ~ balance:", parseFloat(balance));
     const rate = rates.rates.find((rate) => rate.id === symbol);
     if (!rate) {
       return "0.00";
     }
-    console.log("🚀 ~ MainCard ~ rates:", rate.value);
     const balanceNumber = parseFloat(balance);
     const rateNumber = parseFloat(rate.value);
     return (balanceNumber * rateNumber).toFixed(2);
