@@ -21,6 +21,12 @@ export default function useGetMarketChartRange() {
   );
 
   const fetchRates = async (id: string) => {
+    if (
+      value[id]?.dueTimestamp &&
+      value[id]?.dueTimestamp > new Date().getTime()
+    ) {
+      return;
+    }
     const headers = new Headers();
     headers.append("x-api-key", import.meta.env.VITE_COIN_GECKO_API_KEY || "");
     headers.append("accept", "application/json");
@@ -40,9 +46,9 @@ export default function useGetMarketChartRange() {
         }
       );
 
-      // if (response.status !== 200) {
-      //   throw new Error("Error fetching data");
-      // }
+      if (response.status !== 200) {
+        throw new Error("Error fetching data");
+      }
       const data = await response.json();
       console.log("🚀 ~ fetchMarket ~ data:", data);
 

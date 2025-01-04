@@ -16,6 +16,7 @@ import {
 import { AppContext } from "@/context/AppContext";
 import { SelectedAssets } from "@/interfaces/comparator";
 import { cn } from "@/lib/utils";
+import useGetMarketChartRange from "@/services/useGetMarketChartRange";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 
 interface CoinsComboBoxProps {
@@ -27,10 +28,21 @@ interface CoinsComboBoxProps {
 export function CoinsComboBox({ value, setValue, name }: CoinsComboBoxProps) {
   const [open, setOpen] = useState(false);
   const { walletInfo } = useContext(AppContext);
+  const { fetchRates } = useGetMarketChartRange();
   const options = walletInfo.map((info) => ({
-    value: info.symbol,
+    value: info.id,
     label: info.name,
   }));
+
+  const handleSelect = (currentValue: string) => {
+    console.log("🚀 ~ handleSelect ~ currentValue:", currentValue);
+    setValue((prev) => ({
+      ...prev,
+      [name]: currentValue === value ? "" : currentValue,
+    }));
+    setOpen(false);
+    fetchRates(currentValue);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -55,13 +67,8 @@ export function CoinsComboBox({ value, setValue, name }: CoinsComboBoxProps) {
             {options.map((option) => (
               <CommandItem
                 key={option.value}
-                onSelect={(currentValue) => {
-                  setValue((prev) => ({
-                    ...prev,
-                    [name]: currentValue === value ? "" : currentValue,
-                  }));
-                  setOpen(false);
-                }}
+                value={option.value}
+                onSelect={handleSelect}
               >
                 <Check
                   className={cn(

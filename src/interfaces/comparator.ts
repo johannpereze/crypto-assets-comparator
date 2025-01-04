@@ -9,12 +9,14 @@ export interface Token {
   name: string;
   symbol: string;
   address: string;
+  id: string;
 }
 
 export interface WalletInfo {
   name: string;
   balance: string;
   symbol: string;
+  id: string;
 }
 
 export interface SelectedAssets {

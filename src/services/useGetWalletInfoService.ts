@@ -24,6 +24,7 @@ export default function useGetWalletInfoService() {
       name: "Ethereum",
       balance: ethers.formatUnits(ethBalance, 18),
       symbol: "ETH",
+      id: "ethereum",
     };
 
     // Get token balances
@@ -41,6 +42,7 @@ export default function useGetWalletInfoService() {
         balance: ethers.formatUnits(balance, decimals),
         symbol: await tokenContract.symbol(),
         decimals,
+        id: tokenData.find((token) => token.address === tokenAddress)?.id || "",
       };
     });
     try {
